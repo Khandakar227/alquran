@@ -1,0 +1,24 @@
+.arabicWord {
+  position: relative;
+}
+.arabicWord .translation {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  padding: 5px;
+  width: max-content;
+  display: none;
+}
+.arabicWord .transliteration {
+  position: absolute;
+  top: 100%;
+  z-index: 1;
+  right: 0;
+  padding: 5px;
+  width: max-content;
+  display: none;
+}
+.arabicWord:hover .translation,
+.arabicWord:hover .transliteration {
+  display: block;
+}
