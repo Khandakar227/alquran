@@ -1,5 +1,7 @@
 import useSWR, { Key } from "swr";
 import { useState, useEffect } from "react";
+import { LastRead } from "./types";
+import { useLocalStorageValue } from "@mantine/hooks";
 class SWRError extends Error {
   info: any | undefined;
   status: number | undefined;
@@ -45,4 +47,16 @@ export const useIsMounted = () => {
     setIsMounted(true);
   }, []);
   return isMounted;
+};
+
+export const checkLastRead = () => {
+  const [lastRead, setLastRead] = useLocalStorageValue({ key: "last-read" });
+  try {
+    if (lastRead)
+      return { lastRead: JSON.parse(lastRead) as LastRead, setLastRead };
+  } catch (error) {
+    console.log(error);
+    return { lastRead: null, setLastRead };
+  }
+  return { lastRead: null, setLastRead };
 };

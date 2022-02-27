@@ -30,3 +30,9 @@ export type Ayah = {
     intervalRef: MutableRefObject<any>;
     isReady: MutableRefObject<boolean>;
   }
+
+  export type LastRead = {
+    surah_number: number | string,
+    from: number | string,
+    to: number | string,
+  }

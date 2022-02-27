@@ -2,8 +2,7 @@ import { GetServerSidePropsContext } from "next";
 import MetaData from "@/public/metadata.json";
 import { Container, Loader, Title, Box, Divider } from "@mantine/core";
 import useSWR from "swr";
-import { useLocalStorageValue } from "@mantine/hooks";
-import { fetcher } from "@/libs/index";
+import { checkLastRead, fetcher } from "@/libs/index";
 import { useRouter } from "next/router";
 import Error from "@/components/Error";
 import Ayahs from "@/components/Ayahs";
@@ -11,6 +10,7 @@ import Head from "next/head";
 import SelectASurah from "@/components/SelectASurah";
 import { useTranslation } from "@/libs/context";
 import AudioProvider from "@/libs/context/audio";
+import { useEffect } from "react";
 
 export default function Surah({
   surah,
@@ -29,15 +29,25 @@ export default function Surah({
   const router = useRouter();
   const [translation, _] = useTranslation();
   const { ayah, surah_number, tr } = router.query;
-
   const { data, error: swrError } = useSWR(getURL(), fetcher);
+  const {setLastRead} = checkLastRead()
 
-  console.log(data);
+  useEffect(() => {
+
+    const from = ayah?.toString().split(":")[0] || "";
+    const to = ayah?.toString().split(":")[1] || "";
+    
+    setLastRead(JSON.stringify({from, to, surah_number}))
+
+  }, [ayah, surah_number])
 
   function getURL() {
+    const from = ayah?.toString().split(":")[0] || "";
+    const to = ayah?.toString().split(":")[1] || "";
+
     const searchParams = new URLSearchParams({
-      startFrom: ayah?.toString().split(":")[0] || "",
-      endAt: ayah?.toString().split(":")[1] || "",
+      startFrom: from,
+      endAt: to,
       surah_number: surah_number ? surah_number?.toString() : "1",
       tr: tr ? tr.toString() : translation.toString(),
     });
