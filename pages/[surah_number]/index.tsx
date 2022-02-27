@@ -2,14 +2,15 @@ import { GetServerSidePropsContext } from "next";
 import MetaData from "@/public/metadata.json";
 import { Container, Loader, Title, Box, Divider } from "@mantine/core";
 import useSWR from "swr";
-import { useLocalStorageValue } from '@mantine/hooks';
+import { useLocalStorageValue } from "@mantine/hooks";
 import { fetcher } from "@/libs/index";
 import { useRouter } from "next/router";
-import Error from '@/components/Error';
+import Error from "@/components/Error";
 import Ayahs from "@/components/Ayahs";
-import Head from 'next/head'
+import Head from "next/head";
 import SelectASurah from "@/components/SelectASurah";
 import { useTranslation } from "@/libs/context";
+import AudioProvider from "@/libs/context/audio";
 
 export default function Surah({
   surah,
@@ -30,7 +31,7 @@ export default function Surah({
   const { ayah, surah_number, tr } = router.query;
 
   const { data, error: swrError } = useSWR(getURL(), fetcher);
-  
+
   console.log(data);
 
   function getURL() {
@@ -38,39 +39,49 @@ export default function Surah({
       startFrom: ayah?.toString().split(":")[0] || "",
       endAt: ayah?.toString().split(":")[1] || "",
       surah_number: surah_number ? surah_number?.toString() : "1",
-      tr: tr ? tr.toString() : translation.toString()
+      tr: tr ? tr.toString() : translation.toString(),
     });
-    
+
     return `/api?` + (searchParams && searchParams.toString());
   }
 
-  if (!surah || error) return <Error error={error}/>;
+  if (!surah || error) return <Error error={error} />;
 
   return (
     <Container padding="md">
       <Head>
         <title>{`${surah.number}. ${surah.englishName} (${surah.name}) - Al Quran`}</title>
-        <meta name="title" content={`${surah.number}. ${surah.englishName} (${surah.name}) - Al Quran`}/>
-        <meta name="description" content="A site for reading Quran."/>
-        <meta name="keywords" content={`Al Quran, ${surah.englishName}, chapter ${surah.number}`}/>
-        <meta name="robots" content="index, follow"/>
-        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta
+          name="title"
+          content={`${surah.number}. ${surah.englishName} (${surah.name}) - Al Quran`}
+        />
+        <meta name="description" content="A site for reading Quran." />
+        <meta
+          name="keywords"
+          content={`Al Quran, ${surah.englishName}, chapter ${surah.number}`}
+        />
+        <meta name="robots" content="index, follow" />
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
       </Head>
 
       <SelectASurah />
 
-      <Title order={1} align="center" mt="lg" lang="ar">
-        {surah.name}
-      </Title>
-      <Title order={2} mt="md" align="center">
-        {surah.number}. {surah.englishName} ({surah.englishNameTranslation})
-      </Title>
-      <Divider my='md'/>
-      { data || swrError ? <Ayahs data={data} surahDetail={surah}/> :
-      <Box sx={{textAlign:'center', margin: '1rem auto'}}>
-        <Loader arabicForm = 'medial' size='lg'/> 
-      </Box>
-        }
+      <AudioProvider>
+        <Title order={1} align="center" mt="lg" lang="ar">
+          {surah.name}
+        </Title>
+        <Title order={2} mt="md" align="center">
+          {surah.number}. {surah.englishName} ({surah.englishNameTranslation})
+        </Title>
+        <Divider my="md" />
+        {data || swrError ? (
+          <Ayahs data={data} surahDetail={surah} />
+        ) : (
+          <Box sx={{ textAlign: "center", margin: "1rem auto" }}>
+            <Loader arabicForm="medial" size="lg" />
+          </Box>
+        )}
+      </AudioProvider>
     </Container>
   );
 }

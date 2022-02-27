@@ -19,7 +19,7 @@ function useTranslationProvider() {
   const [translation, setTranslation] = useState<Translation>("en");
 
   useEffect(()=> {
-  	if (localStorage.getItem("translation")) setTranslation(localStorage.getItem("translation"))
+  	if (localStorage.getItem("translation")) setTranslation(localStorage.getItem("translation") || "en")
   },[])
   
   function translateTo(tr: Translation) {

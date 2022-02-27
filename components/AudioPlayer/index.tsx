@@ -1,5 +1,7 @@
 //Most of the work done from https://letsbuildui.dev/articles/building-an-audio-player-with-react-hooks
+import { useAudio } from "@/libs/context/audio";
 import { generateNumber } from "@/libs/index";
+import { AudioContextProps } from "@/libs/types";
 import { Box, Button } from "@mantine/core";
 import {
   LoopIcon,
@@ -16,12 +18,10 @@ export default function AudioPlayer({
   ayah_numbers: number[];
 }) {
   const urls = useRef<string[]>([]);
-  const [trackIndex, setTrackIndex] = useState(0);
+  const {trackIndex, setTrackIndex, isPlaying, setIsPlaying, loop, setLoop} = useAudio() as AudioContextProps;
+  
   const [trackProgress, setTrackProgress] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [loop, setLoop] = useState<0 | 1 | 2>(0);
-
-  const audioRef = useRef(new Audio(urls.current[trackIndex]));
+  const audioRef = useRef({} as HTMLAudioElement);
   const intervalRef = useRef<any>();
   const isReady = useRef(false);
 
@@ -35,6 +35,7 @@ export default function AudioPlayer({
             `https://cdn2.islamic.network/quran/audio/128/ar.alafasy/${ayah_num}.mp3`
         )
       : [];
+     audioRef.current = new Audio(urls.current[trackIndex])
 
     console.log("Inside useEffect 1, setUrls", urls);
   }, [ayah_numbers]);
@@ -108,9 +109,11 @@ export default function AudioPlayer({
           setTrackProgress(audioRef.current.currentTime);
           setIsPlaying(true);
         });
+      } else {
+        //No repeat audio
+        setIsPlaying(false);
       }
     } else {
-      //No repeat audio
       setTrackProgress(audioRef.current.currentTime);
     }
     intervalRef.current = requestAnimationFrame(startTimer);
@@ -184,6 +187,7 @@ export default function AudioPlayer({
             }}
           >
             <small>{displayDuration(audioRef.current.currentTime)}</small>
+            <small>{trackIndex + 1}</small>
             <small>{displayDuration(duration)}</small>
           </Box>
           <AudioControls

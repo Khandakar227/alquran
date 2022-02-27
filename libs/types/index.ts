@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction, MutableRefObject } from "react";
 
 export type Ayah = {
     ayah_number?: number;
@@ -17,5 +18,15 @@ export type Ayah = {
     numberOfAyahs: number;
     revelationType: string;
   };
-  export type Translation = "bn" | "en"
+  export type Translation = "bn" | "en" | string;
   
+  export interface AudioContextProps {
+    trackIndex: number;
+    setTrackIndex: Dispatch<SetStateAction<number>>;
+    isPlaying: boolean;
+    setIsPlaying: Dispatch<SetStateAction<boolean>>;
+    loop: 0 | 1 | 2;
+    setLoop: Dispatch<SetStateAction<0 | 1 | 2>>;
+    intervalRef: MutableRefObject<any>;
+    isReady: MutableRefObject<boolean>;
+  }

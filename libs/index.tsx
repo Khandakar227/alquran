@@ -1,5 +1,5 @@
 import useSWR, { Key } from "swr";
-
+import { useState, useEffect } from "react";
 class SWRError extends Error {
   info: any | undefined;
   status: number | undefined;
@@ -39,3 +39,10 @@ export function generateNumber(from: number, to: number) {
   return numbers;
 }
 
+export const useIsMounted = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  return isMounted;
+};

@@ -5,31 +5,45 @@ import axios from "axios";
 import MetaData from "@/public/metadata.json";
 import { Ayah, Surah } from "@/libs/types";
 import Error from "@/components/Error";
-import Head from 'next/head';
+import Head from "next/head";
 import Ayahs from "@/components/Ayahs";
+import AudioProvider from "@/libs/context/audio";
 
-export default function AyahInSurah({ data, surah }: { data: Ayah[]; surah: Surah }) {
-
-  if (!surah || !data.length) return <Error/>
+export default function AyahInSurah({
+  data,
+  surah,
+}: {
+  data: Ayah[];
+  surah: Surah;
+}) {
+  if (!surah || !data.length) return <Error />;
   return (
     <Container>
       <Head>
         <title>{`${surah.number}: ${data[0].ayah_number_in_surah} - Al Quran`}</title>
-        <meta name="title" content={`${surah.englishName} , verse - ${data[0].ayah_number_in_surah}`}/>
-        <meta name="description" content={data[0].ayahEN}/>
-        <meta name="keywords" content={`Al Quran, ${surah.englishName}, chapter ${surah.number}, Ayah, Ayah Number - ${data[0].ayah_number_in_surah}`}/>
-        <meta name="robots" content="index, follow"/>
-        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta
+          name="title"
+          content={`${surah.englishName} , verse - ${data[0].ayah_number_in_surah}`}
+        />
+        <meta name="description" content={data[0].ayahEN} />
+        <meta
+          name="keywords"
+          content={`Al Quran, ${surah.englishName}, chapter ${surah.number}, Ayah, Ayah Number - ${data[0].ayah_number_in_surah}`}
+        />
+        <meta name="robots" content="index, follow" />
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
       </Head>
-
-      <Title order={1} align="center" mt="lg" lang="ar">
-        {surah.name}
-      </Title>
-      <Title order={2} mt="md" align="center">
-        {surah.number}. {surah.englishName} ({surah.englishNameTranslation})
-      </Title>
-      <Divider my='md'/>
-      <Ayahs data={data} surahDetail={surah} />
+      
+      <AudioProvider>
+        <Title order={1} align="center" mt="lg" lang="ar">
+          {surah.name}
+        </Title>
+        <Title order={2} mt="md" align="center">
+          {surah.number}. {surah.englishName} ({surah.englishNameTranslation})
+        </Title>
+        <Divider my="md" />
+        <Ayahs data={data} surahDetail={surah} />
+      </AudioProvider>
     </Container>
   );
 }
