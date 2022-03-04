@@ -1,6 +1,6 @@
 //Most of the work done from https://letsbuildui.dev/articles/building-an-audio-player-with-react-hooks
 import { useAudio } from "@/libs/context/audio";
-import { generateNumber } from "@/libs/index";
+import { generateNumber, docWrite } from "@/libs/index";
 import { AudioContextProps } from "@/libs/types";
 import { Box, Button } from "@mantine/core";
 import {
@@ -13,11 +13,10 @@ import {
 import { useEffect, useRef, useState } from "react";
 
 export default function AudioPlayer({
-  ayah_numbers,
+  urls=[]
 }: {
-  ayah_numbers: number[];
+  urls: string[]| any[]
 }) {
-  const urls = useRef<string[]>([]);
   const {trackIndex, setTrackIndex, isPlaying, setIsPlaying, loop, setLoop} = useAudio() as AudioContextProps;
   
   const [trackProgress, setTrackProgress] = useState(0);
@@ -29,16 +28,10 @@ export default function AudioPlayer({
 
   //Set audio URLS
   useEffect(() => {
-    urls.current = ayah_numbers[0]
-      ? generateNumber(ayah_numbers[0], ayah_numbers[1]).map(
-          (ayah_num) =>
-            `https://cdn2.islamic.network/quran/audio/128/ar.alafasy/${ayah_num}.mp3`
-        )
-      : [];
-     audioRef.current = new Audio(urls.current[trackIndex])
-
-    console.log("Inside useEffect 1, setUrls", urls);
-  }, [ayah_numbers]);
+    setTrackIndex(0)
+     audioRef.current = new Audio(urls[trackIndex]);
+  }, [urls]);
+ 
   /**
    * Go to previous tag
    */
@@ -53,7 +46,7 @@ export default function AudioPlayer({
    * Go to next track
    */
   const toNextTrack = () => {
-    if (trackIndex < urls.current.length - 1) {
+    if (trackIndex < urls.length - 1) {
       setTrackIndex(trackIndex + 1);
     } else {
       setTrackIndex(0);
@@ -81,7 +74,7 @@ export default function AudioPlayer({
   // Handle setup when changing tracks
   useEffect(() => {
     audioRef.current.pause();
-    audioRef.current = new Audio(urls.current[trackIndex]);
+    audioRef.current = new Audio(urls[trackIndex]);
     setTrackProgress(audioRef.current.currentTime);
 
     if (isReady.current) {
@@ -153,7 +146,8 @@ export default function AudioPlayer({
   };
   return (
     <Box sx={{ padding: "5rem 0" }}>
-      {urls.current && (
+      {
+      urls.length && (
         <Box
           sx={(theme) => ({
             position: "fixed",
@@ -199,7 +193,8 @@ export default function AudioPlayer({
             onLoopClick={setLoop}
           />
         </Box>
-      )}
+      )
+      }
     </Box>
   );
 }

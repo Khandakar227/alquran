@@ -2,11 +2,25 @@ import { Box, Button, Paper } from "@mantine/core";
 import Link from "next/link";
 import { Ayah, Surah } from "@/libs/types/index";
 import ArabicWBW from "@/components/ArabicWBW";
+import {useAudio} from "@/libs/context/audio";
 import AudioPlayer from "../AudioPlayer";
+import {PauseIcon, PlayIcon} from "@radix-ui/react-icons";
+import {generateNumber} from "@/libs/index"
+import {useState, useEffect} from "react";
 
 function Ayahs({ data, surahDetail }: { data: Ayah[]; surahDetail: Surah }) {
-  console.log(surahDetail.number);
-
+ const [urls, setUrls] = useState<string[] | any[]>([]);
+ 
+ const {isPlaying, setIsPlaying, trackIndex, setTrackIndex} = useAudio() as AudioContextProps;
+ 
+ useEffect(() =>{
+setUrls(data[0]
+      ? generateNumber(data[0].ayah_number, data[data.length - 1].ayah_number || 1).map(
+          (ayah_num) =>
+            `https://cdn2.islamic.network/quran/audio/128/ar.alafasy/${ayah_num}.mp3`
+        ) : []);
+ },[])
+  
   function readMore() {
     const from = data[data.length - 1].ayah_number_in_surah;
     const to =
@@ -30,16 +44,31 @@ function Ayahs({ data, surahDetail }: { data: Ayah[]; surahDetail: Surah }) {
   function nextSurah() {
     return `/${surahDetail.number < 114 && surahDetail.number + 1}`;
   }
+  
+  function play (i: number) {
+    if (trackIndex! == i) setTrackIndex(i)
+    else setIsPlaying(true)
+  }
   return (
     <>
       {data &&
-        data?.map((ayah) => (
+        data?.map((ayah, i) => (
           <Paper mb="sm" shadow="xs" padding="sm" key={ayah.ayah_number}>
             <span>{ayah.ayah_number_in_surah}. </span>
             <ArabicWBW ayah={ayah.ayah_wbw} />
             <Box sx={{ fontSize: "1.1rem" }}>
               {ayah.ayahEN ? ayah.ayahEN : ayah.ayahBN}
             </Box>
+            {
+              isPlaying && trackIndex === i ?
+              <Button compact variant=" outline" onClick={() => setIsPlaying(false)}>
+                <PauseIcon />
+              </Button>
+              :
+              <Button compact variant="outline" onClick={() => play(i)}>
+                <PlayIcon/>
+              </Button>
+            }
           </Paper>
         ))}
       {data && (
@@ -78,7 +107,7 @@ function Ayahs({ data, surahDetail }: { data: Ayah[]; surahDetail: Surah }) {
               </Button>
             </Link>
           )}
-          <AudioPlayer ayah_numbers={[data[0].ayah_number || 1, data[data.length - 1].ayah_number || 1]} />
+          <AudioPlayer urls={urls} />
         </Box>
       )}
     </>
@@ -86,3 +115,5 @@ function Ayahs({ data, surahDetail }: { data: Ayah[]; surahDetail: Surah }) {
 }
 
 export default Ayahs;
+
+
