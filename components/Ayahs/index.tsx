@@ -46,7 +46,7 @@ setUrls(data[0]
   }
   
   function play (i: number) {
-    if (trackIndex! == i) setTrackIndex(i)
+    if (trackIndex !== i) setTrackIndex(i)
     else setIsPlaying(true)
   }
   return (
@@ -61,7 +61,7 @@ setUrls(data[0]
             </Box>
             {
               isPlaying && trackIndex === i ?
-              <Button compact variant=" outline" onClick={() => setIsPlaying(false)}>
+              <Button compact variant="outline" color='red' onClick={() => setIsPlaying(false)}>
                 <PauseIcon />
               </Button>
               :
@@ -107,7 +107,9 @@ setUrls(data[0]
               </Button>
             </Link>
           )}
-          <AudioPlayer urls={urls} />
+          <AudioPlayer urls={urls}>
+          <Box components='small' sx={{textAlign:'center', fontSize:'10px'}}> Recited by Mishari bin Rashed Alafasy </Box>
+          </AudioPlayer>
         </Box>
       )}
     </>

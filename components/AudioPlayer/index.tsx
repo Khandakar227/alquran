@@ -1,6 +1,6 @@
 //Most of the work done from https://letsbuildui.dev/articles/building-an-audio-player-with-react-hooks
 import { useAudio } from "@/libs/context/audio";
-import { generateNumber, docWrite } from "@/libs/index";
+import { generateNumber } from "@/libs/index";
 import { AudioContextProps } from "@/libs/types";
 import { Box, Button } from "@mantine/core";
 import {
@@ -10,12 +10,14 @@ import {
   TrackNextIcon,
   TrackPreviousIcon,
 } from "@radix-ui/react-icons";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, ReactNode } from "react";
 
 export default function AudioPlayer({
-  urls=[]
+  urls=[],
+  children,
 }: {
-  urls: string[]| any[]
+  urls: string[]| any[];
+  children?:ReactNode;
 }) {
   const {trackIndex, setTrackIndex, isPlaying, setIsPlaying, loop, setLoop} = useAudio() as AudioContextProps;
   
@@ -145,7 +147,7 @@ export default function AudioPlayer({
     );
   };
   return (
-    <Box sx={{ padding: "5rem 0" }}>
+    <Box sx={{ padding: "5.5rem 0" }}>
       {
       urls.length && (
         <Box
@@ -155,7 +157,7 @@ export default function AudioPlayer({
             left: "0",
             width: "100%",
             background: theme.colorScheme === 'dark' ? theme.black : theme.white,
-            padding: "5px 0",
+            padding: "2px 0 4px",
             boxShadow: '0 1px 3px rgb(0 0 0), rgb(0 0 0) 0px 20px 25px 0px, rgb(0 0 0) 0px 10px 10px -5px',
           })}
         >
@@ -192,6 +194,7 @@ export default function AudioPlayer({
             onPlayPauseClick={setIsPlaying}
             onLoopClick={setLoop}
           />
+          {children}
         </Box>
       )
       }

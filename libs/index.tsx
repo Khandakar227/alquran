@@ -1,6 +1,7 @@
 import useSWR, { Key } from "swr";
 import { useState, useEffect } from "react";
 import { LastRead } from "./types";
+import axios from 'axios';
 import { useLocalStorageValue } from "@mantine/hooks";
 class SWRError extends Error {
   info: any | undefined;
@@ -60,3 +61,7 @@ export const checkLastRead = () => {
   }
   return { lastRead: null, setLastRead };
 };
+
+export const terminalLog = async ({url='http://localhost:3000', args}:{url: string, args: any}) => {
+ await axios.post(`${url}/api/logger`, args)
+}
