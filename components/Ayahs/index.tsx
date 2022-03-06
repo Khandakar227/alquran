@@ -1,6 +1,6 @@
 import { Box, Button, Paper } from "@mantine/core";
 import Link from "next/link";
-import { Ayah, Surah } from "@/libs/types/index";
+import { Ayah, Surah, AudioContextProps } from "@/libs/types/index";
 import ArabicWBW from "@/components/ArabicWBW";
 import {useAudio} from "@/libs/context/audio";
 import AudioPlayer from "../AudioPlayer";

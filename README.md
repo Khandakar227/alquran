@@ -16,5 +16,5 @@ Commit and pull a request.
 
 ## Contact
 For any suggestion, issue contact where
-[xenonknight54@gmail.com](mailto:xenonknight54@gmail.com)
-[Facebook](https://www.facebook.com/profile.php?id=100015443855406)
+1. [xenonknight54@gmail.com](mailto:xenonknight54@gmail.com)
+2. [Facebook](https://www.facebook.com/profile.php?id=100015443855406)
