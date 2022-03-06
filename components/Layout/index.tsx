@@ -1,5 +1,4 @@
 import { TextInput, Button, Box } from "@mantine/core";
-import {GithubIcon} from '@radix-ui/react-icons'
 import { useForm } from "@mantine/hooks";
 import Link from "next/link";
 import { useRouter } from 'next/router';

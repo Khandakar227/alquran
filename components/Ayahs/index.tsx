@@ -15,7 +15,7 @@ function Ayahs({ data, surahDetail }: { data: Ayah[]; surahDetail: Surah }) {
  
  useEffect(() =>{
 setUrls(data[0]
-      ? generateNumber(data[0].ayah_number, data[data.length - 1].ayah_number || 1).map(
+      ? generateNumber(data[0].ayah_number || 1, data[data.length - 1].ayah_number || 1)?.map(
           (ayah_num) =>
             `https://cdn2.islamic.network/quran/audio/128/ar.alafasy/${ayah_num}.mp3`
         ) : []);
@@ -108,7 +108,7 @@ setUrls(data[0]
             </Link>
           )}
           <AudioPlayer urls={urls}>
-          <Box components='small' sx={{textAlign:'center', fontSize:'10px'}}> Recited by Mishari bin Rashed Alafasy </Box>
+          <Box component='small' sx={{textAlign:'center', fontSize:'10px'}}> Recited by Mishari bin Rashed Alafasy </Box>
           </AudioPlayer>
         </Box>
       )}
