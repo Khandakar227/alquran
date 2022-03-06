@@ -6,7 +6,7 @@ import { checkLastRead, fetcher } from "@/libs/index";
 import { useRouter } from "next/router";
 import Error from "@/components/Error";
 import Ayahs from "@/components/Ayahs";
-import Head from "next/head";
+import SEO from "@/components/SEO";
 import SelectASurah from "@/components/SelectASurah";
 import { useTranslation } from "@/libs/context";
 import AudioProvider from "@/libs/context/audio";
@@ -59,25 +59,9 @@ export default function Surah({
 
   return (
     <Container padding="md">
-      <Head>
-        <title>{`${surah.number}. ${surah.englishName} (${surah.name}) - Al Quran`}</title>
-        <meta
-          name="title"
-          content={`${surah.number}. ${surah.englishName} (${surah.name}) - Al Quran`}
+      <SEO
+        title={`${surah.number}. ${surah.englishName} (${surah.name}) - Al Quran`}
         />
-        <meta
-          name="og:title"
-          content={`${surah.number}. ${surah.englishName} (${surah.name}) - Al Quran`}
-        />
-        <meta name="description" content="A web platform for reciting the glorious Quran. Available in different language" />
-          <meta property="og:description" content="A web platform for reciting the glorious Quran. Available in different language" />
-        <meta
-          name="keywords"
-          content={`Al Quran, ${surah.englishName}, chapter ${surah.number}`}
-        />
-        <meta name="robots" content="index, follow" />
-        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-      </Head>
 
       <SelectASurah />
 

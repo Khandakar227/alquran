@@ -1,5 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { createGetInitialProps } from "@mantine/next";
+import SEO from "@/components/SEO";
 
 const getInitialProps = createGetInitialProps();
 
@@ -9,11 +10,8 @@ export default class _Document extends Document {
   render() {
     return (
       <Html>
+        <SEO />
         <Head>
-          <title>Al Quran</title>
-          <meta property="og:title" content="Al Quran" key="title" />
-          <meta property="og:description" content="A web platform for reciting the glorious Quran. Available in different language" />
-          <meta property="og:image" content="/Quran_Kareem.png" />
           <link rel="shortcut icon" href="/Quran_Kareem.png" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link

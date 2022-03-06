@@ -5,7 +5,7 @@ import axios from "axios";
 import MetaData from "@/public/metadata.json";
 import { Ayah, Surah } from "@/libs/types";
 import Error from "@/components/Error";
-import Head from "next/head";
+import SEO from "@/components/SEO";
 import Ayahs from "@/components/Ayahs";
 import AudioProvider from "@/libs/context/audio";
 
@@ -19,26 +19,7 @@ export default function AyahInSurah({
   if (!surah || !data.length) return <Error />;
   return (
     <Container>
-      <Head>
-        <title>{`${surah.number}: ${data[0].ayah_number_in_surah} - Al Quran`}</title>
-        <meta
-          name="title"
-          content={`${surah.englishName} , verse - ${data[0].ayah_number_in_surah}`}
-        />
-        <meta
-          name="og:title"
-          content={`${surah.englishName} , verse - ${data[0].ayah_number_in_surah}`}
-        />
-         <meta name="og:description" content={data[0].ayahEN} />
-        <meta name="description" content={data[0].ayahEN} />
-        <meta
-          name="keywords"
-          content={`Al Quran, ${surah.englishName}, chapter ${surah.number}, Ayah, Ayah Number - ${data[0].ayah_number_in_surah}`}
-        />
-        <meta name="robots" content="index, follow" />
-        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-      </Head>
-      
+       <SEO title={`${surah.number}: ${data[0].ayah_number_in_surah} - Al Quran`} description={data[0].ayahEN} />
       <AudioProvider>
         <Title order={1} align="center" mt="lg" lang="ar">
           {surah.name}
