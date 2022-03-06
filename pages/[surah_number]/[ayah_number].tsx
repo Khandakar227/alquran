@@ -25,6 +25,11 @@ export default function AyahInSurah({
           name="title"
           content={`${surah.englishName} , verse - ${data[0].ayah_number_in_surah}`}
         />
+        <meta
+          name="og:title"
+          content={`${surah.englishName} , verse - ${data[0].ayah_number_in_surah}`}
+        />
+         <meta name="og:description" content={data[0].ayahEN} />
         <meta name="description" content={data[0].ayahEN} />
         <meta
           name="keywords"

@@ -10,6 +10,11 @@ export default class _Document extends Document {
     return (
       <Html>
         <Head>
+          <title>Al Quran</title>
+          <meta property="og:title" content="Al Quran" key="title" />
+          <meta property="og:description" content="A web platform for reciting the glorious Quran. Available in different language" />
+          <meta property="og:image" content="/Quran_Kareem.png" />
+          <link rel="shortcut icon" href="/Quran_Kareem.png" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
             rel="preconnect"
@@ -20,10 +25,6 @@ export default class _Document extends Document {
             href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap"
             rel="stylesheet"
           />
-          {/* <link
-            href="https://fonts.googleapis.com/css2?family=Harmattan&family=IBM+Plex+Sans+Arabic:wght@500&family=Markazi+Text:wght@500&display=swap"
-            rel="stylesheet"
-          /> */}
         </Head>
         <body>
           <Main />

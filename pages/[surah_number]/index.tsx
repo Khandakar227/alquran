@@ -65,7 +65,12 @@ export default function Surah({
           name="title"
           content={`${surah.number}. ${surah.englishName} (${surah.name}) - Al Quran`}
         />
-        <meta name="description" content="A site for reading Quran." />
+        <meta
+          name="og:title"
+          content={`${surah.number}. ${surah.englishName} (${surah.name}) - Al Quran`}
+        />
+        <meta name="description" content="A web platform for reciting the glorious Quran. Available in different language" />
+          <meta property="og:description" content="A web platform for reciting the glorious Quran. Available in different language" />
         <meta
           name="keywords"
           content={`Al Quran, ${surah.englishName}, chapter ${surah.number}`}
