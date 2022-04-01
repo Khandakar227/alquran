@@ -5,7 +5,8 @@ Commit and pull a request.
 1. Available in English and Bangla (Have an intention of adding more language support.
 2. Persistent last read. You can start reading from where you read previously.
 3. Search by word, ayah, letters.
-4. Themes. Light & Dark.
+4. Audio of recitation by Mishari bin Rashid alafasy
+5. Themes. Light & Dark.
 ## Routes.
 | route | details |
 |-------|---------|
