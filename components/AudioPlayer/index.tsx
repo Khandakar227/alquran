@@ -1,6 +1,4 @@
-//Most of the work done from https://letsbuildui.dev/articles/building-an-audio-player-with-react-hooks
 import { useAudio } from "@/libs/context/audio";
-import { generateNumber } from "@/libs/index";
 import { AudioContextProps } from "@/libs/types";
 import { Box, Button } from "@mantine/core";
 import {
@@ -13,123 +11,79 @@ import {
 import { useEffect, useRef, useState, ReactNode } from "react";
 
 export default function AudioPlayer({
-  urls=[],
+  src=[],
   children,
 }: {
-  urls: string[]| any[];
+  src: {metadata?: MediaMetadataInit, url: string}[]| any[];
   children?:ReactNode;
 }) {
   const {trackIndex, setTrackIndex, isPlaying, setIsPlaying, loop, setLoop} = useAudio() as AudioContextProps;
   
   const [trackProgress, setTrackProgress] = useState(0);
   const audioRef = useRef({} as HTMLAudioElement);
-  const intervalRef = useRef<any>();
-  const isReady = useRef(false);
 
-  const { duration } = audioRef.current;
+  const [duration, setDuration] = useState(0);
 
-  //Set audio URLS
-  useEffect(() => {
-    setTrackIndex(0)
-     audioRef.current = new Audio(urls[trackIndex]);
-  }, [urls]);
- 
+  function timeUpdate () {
+    setTrackProgress(audioRef.current.currentTime ?? 0)
+  }
+  function loadedMetadata () {
+    if (!audioRef.current.tagName) return;
+    setDuration(audioRef.current.duration);
+  }
+  function ended () {
+    switch(loop) {
+    case 'repeat-all':
+      toNextTrack();
+      break;
+    case 'repeat':
+      audioRef.current.play();
+      break;
+    default:
+      setIsPlaying(false);
+     }
+  }
   /**
    * Go to previous tag
    */
   const toPrevTrack = () => {
-    if (trackIndex - 1 < 0) {
-      setTrackIndex(0);
-    } else {
-      setTrackIndex(trackIndex - 1);
-    }
+    if (trackIndex - 1 < 0) setTrackIndex(0);
+    else setTrackIndex(trackIndex - 1);
   };
   /**
    * Go to next track
    */
   const toNextTrack = () => {
-    if (trackIndex < urls.length - 1) {
-      setTrackIndex(trackIndex + 1);
-    } else {
-      setTrackIndex(0);
-    }
+    if (trackIndex < src.length - 1) setTrackIndex(trackIndex + 1);
+    else  setTrackIndex(0);
   };
-
-  //Whenever isPlaying state changes, Call the play() or pause()
-  useEffect(() => {
-    if (isPlaying) {
-      audioRef.current.play().then(() => startTimer()); //Start tracking progress
-    } else {
-      cancelAnimationFrame(intervalRef.current);
-      audioRef.current.pause();
-    }
-  }, [isPlaying, loop]);
-
+  
+  useEffect(() =>{
+    if (!audioRef.current.tagName) return;
+    
+    if(isPlaying) {
+      audioRef.current.play().then(() =>{
+        showMediaSession(src[trackIndex].metadata, src.length)
+      })
+    } else audioRef.current.pause()
+  },[isPlaying, trackIndex])
+  
   // cleanup
   useEffect(() => {
+    if (!audioRef.current.tagName) return
     return () => {
       audioRef.current.pause();
-      cancelAnimationFrame(intervalRef.current);
     };
   }, []);
-
-  // Handle setup when changing tracks
-  useEffect(() => {
-    audioRef.current.pause();
-    audioRef.current = new Audio(urls[trackIndex]);
-    setTrackProgress(audioRef.current.currentTime);
-
-    if (isReady.current) {
-      audioRef.current.play().then(() => {
-        setIsPlaying(true);
-        startTimer();
-      });
-    } else {
-      // Set the isReady ref as true for the next pass
-      isReady.current = true;
-    }
-  }, [trackIndex]);
-
-  const startTimer = () => {
-    // Clear any timers already running
-    cancelAnimationFrame(intervalRef.current);
-    if (audioRef.current.ended) {
-      if (loop === 1) {
-        //Loop all the audio
-        toNextTrack();
-      } else if (loop === 2) {
-        //Repeat single audio
-        audioRef.current.pause();
-        audioRef.current.play().then(() => {
-          setTrackProgress(audioRef.current.currentTime);
-          setIsPlaying(true);
-        });
-      } else {
-        //No repeat audio
-        setIsPlaying(false);
-      }
-    } else {
-      setTrackProgress(audioRef.current.currentTime);
-    }
-    intervalRef.current = requestAnimationFrame(startTimer);
-  };
-
+  
+  useEffect(() =>{
+    setTrackIndex(0)
+  },[src])
   const onScrub = (value: string) => {
-    // Clear any timers already running
-    cancelAnimationFrame(intervalRef.current);
-
     audioRef.current.currentTime = isNaN(+value) ? 0 : +value;
-
     setTrackProgress(audioRef.current.currentTime);
   };
 
-  const onScrubEnd = () => {
-    // If not playing, start
-    if (!isPlaying) {
-      setIsPlaying(true);
-    }
-    startTimer();
-  };
 
   const displayDuration = (time: number) => {
     function padZero(v: number) {
@@ -146,10 +100,30 @@ export default function AudioPlayer({
       padZero(time ? sec : 0)
     );
   };
+ const showMediaSession = (metadata:MediaMetadataInit, numOfTracks: number) => {
+  if (!('mediaSession' in navigator)) return
+  
+  navigator.mediaSession.metadata = new MediaMetadata(metadata);
+  
+  navigator.mediaSession.setActionHandler('play', function() {
+    setIsPlaying(true);
+    navigator.mediaSession.playbackState = "playing";
+  });
+  
+  navigator.mediaSession.setActionHandler('pause', function() {
+    setIsPlaying(false);
+    navigator.mediaSession.playbackState  = "paused";
+  });
+  navigator.mediaSession.setActionHandler('stop', function() {
+    setIsPlaying(false);
+  })
+  navigator.mediaSession.setActionHandler('previoustrack', toPrevTrack);
+  navigator.mediaSession.setActionHandler('nexttrack', toNextTrack)
+}
   return (
-    <Box sx={{ padding: "5.5rem 0" }}>
+    <Box sx={{ padding: "5.2rem 0" }}>
       {
-      urls.length && (
+      src.length && (
         <Box
           sx={(theme) => ({
             position: "fixed",
@@ -161,6 +135,13 @@ export default function AudioPlayer({
             boxShadow: '0 1px 3px rgb(0 0 0), rgb(0 0 0) 0px 20px 25px 0px, rgb(0 0 0) 0px 10px 10px -5px',
           })}
         >
+          <audio 
+          src={src[trackIndex].url}
+          ref={audioRef}
+          onTimeUpdate={() => timeUpdate()}
+          onLoadedMetadata={()=>loadedMetadata()}
+          onEnded={()=>ended()}
+          ></audio>
           <Box
             component="input"
             sx={{ width: "100%", height: "5px" }}
@@ -172,8 +153,6 @@ export default function AudioPlayer({
             onChange={(e: { target: { value: string } }) =>
               onScrub(e.target.value)
             }
-            onMouseUp={onScrubEnd}
-            onKeyUp={onScrubEnd}
           />
           <Box
             sx={{
@@ -211,7 +190,7 @@ function AudioControls({
   onLoopClick,
 }: {
   isPlaying: boolean;
-  isLoop: 0 | 1 | 2;
+  isLoop: "repeat" | "no-repeat" | "repeat-all";
   onPlayPauseClick: Function;
   onPrevClick: any;
   onNextClick: any;
@@ -227,18 +206,22 @@ function AudioControls({
       }}
     >
       <Button
-        title={isLoop === 0 ? "No loop" : isLoop === 2 ? "Loop once" : "Loop"}
+        title={isLoop === "no-repeat" ? "No loop" : isLoop === "repeat" ? "Loop once" : "Loop"}
         variant="filled"
-        color={isLoop === 1 ? "green" : isLoop === 2 ? "blue" : "red"}
+        color={isLoop === "repeat-all" ? "green" : isLoop === "repeat" ? "blue" : "red"}
         radius="md"
         size="md"
         sx={{ display: "flex", alignItems: "center" }}
         compact
         aria-label="Loop"
-        onClick={() => onLoopClick(isLoop === 0 ? 1 : isLoop === 1 ? 2 : 0)}
+        onClick={() => onLoopClick(
+            isLoop === "no-repeat" ?
+            "repeat" : isLoop === "repeat" ?
+            "repeat-all" : "no-repeat"
+            )}
       >
         <LoopIcon />
-        <small>{isLoop === 0 ? "X" : isLoop === 2 ? "1" : ""}</small>
+        <small>{isLoop === "no-repeat" ? "X" : isLoop === "repeat" ? "1" : ""}</small>
       </Button>
       <Button
         title="Previous ayah"

@@ -5,7 +5,7 @@ import ArabicWBW from "@/components/ArabicWBW";
 import {useAudio} from "@/libs/context/audio";
 import AudioPlayer from "../AudioPlayer";
 import {PauseIcon, PlayIcon} from "@radix-ui/react-icons";
-import {generateNumber} from "@/libs/index"
+import {generateMetadata} from "@/libs/index"
 import {useState, useEffect} from "react";
 
 function Ayahs({ data, surahDetail }: { data: Ayah[]; surahDetail: Surah }) {
@@ -15,10 +15,7 @@ function Ayahs({ data, surahDetail }: { data: Ayah[]; surahDetail: Surah }) {
  
  useEffect(() =>{
 setUrls(data[0]
-      ? generateNumber(data[0].ayah_number || 1, data[data.length - 1].ayah_number || 1)?.map(
-          (ayah_num) =>
-            `https://cdn2.islamic.network/quran/audio/128/ar.alafasy/${ayah_num}.mp3`
-        ) : []);
+      ? generateMetadata(data, surahDetail) : []);
  },[])
   
   function readMore() {
@@ -107,7 +104,7 @@ setUrls(data[0]
               </Button>
             </Link>
           )}
-          <AudioPlayer urls={urls}>
+          <AudioPlayer src={urls}>
           <Box component='small' sx={{textAlign:'center', fontSize:'10px'}}> Recited by Mishari bin Rashed Alafasy </Box>
           </AudioPlayer>
         </Box>

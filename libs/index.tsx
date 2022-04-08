@@ -1,8 +1,8 @@
 import useSWR, { Key } from "swr";
 import { useState, useEffect } from "react";
-import { LastRead } from "./types";
-import axios from 'axios';
+import { LastRead, Surah, Ayah } from "./types";
 import { useLocalStorageValue } from "@mantine/hooks";
+
 class SWRError extends Error {
   info: any | undefined;
   status: number | undefined;
@@ -62,6 +62,14 @@ export const checkLastRead = () => {
   return { lastRead: null, setLastRead };
 };
 
-export const terminalLog = async ({url='http://localhost:3000', args}:{url: string, args: any}) => {
- await axios.post(`${url}/api/logger`, args)
+export function generateMetadata (ayahs:Ayah[], surahDetail:Surah) {
+  let data = [];
+  console.log(ayahs)
+  for (let i = 0; i < ayahs.length; i++) {
+    data.push({
+            url:`https://cdn2.islamic.network/quran/audio/128/ar.alafasy/${ayahs[i].ayah_number}.mp3`,
+            metadata: {title: `${surahDetail.number}. ${surahDetail.englishName}, Ayat no. ${ayahs[i].ayah_number_in_surah}`}
+            });
+  }
+  return data;
 }

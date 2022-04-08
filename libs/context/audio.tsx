@@ -12,7 +12,7 @@ const audioContext = createContext<AudioContextProps | {}>({});
 export const useAudioProvider = () => {
   const [trackIndex, setTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [loop, setLoop] = useState<0 | 1 | 2>(0);
+  const [loop, setLoop] = useState<'no-repeat' | "repeat" | 'repeat-all'>("no-repeat");
   const intervalRef = useRef<any>();
   const isReady = useRef(false);
 

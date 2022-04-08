@@ -25,8 +25,8 @@ export type Ayah = {
     setTrackIndex: Dispatch<SetStateAction<number>>;
     isPlaying: boolean;
     setIsPlaying: Dispatch<SetStateAction<boolean>>;
-    loop: 0 | 1 | 2;
-    setLoop: Dispatch<SetStateAction<0 | 1 | 2>>;
+    loop:  "repeat" | "no-repeat" | "repeat-all";
+    setLoop: Dispatch<SetStateAction< "repeat" | "no-repeat" | "repeat-all">>;
     intervalRef: MutableRefObject<any>;
     isReady: MutableRefObject<boolean>;
   }
