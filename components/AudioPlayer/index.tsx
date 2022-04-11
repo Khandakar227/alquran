@@ -32,6 +32,7 @@ export default function AudioPlayer({
     setDuration(audioRef.current.duration);
   }
   function ended () {
+    setTrackProgress(audioRef.current.currentTime ?? 0)
     switch(loop) {
     case 'repeat-all':
       toNextTrack();
@@ -141,6 +142,8 @@ export default function AudioPlayer({
           onTimeUpdate={() => timeUpdate()}
           onLoadedMetadata={()=>loadedMetadata()}
           onEnded={()=>ended()}
+          preload="auto"
+          className="d-none"
           ></audio>
           <Box
             component="input"
@@ -149,7 +152,7 @@ export default function AudioPlayer({
             value={isNaN(trackProgress) ? 1 : trackProgress}
             step={0.5}
             min={0}
-            max={duration ? duration - 1 : 0}
+            max={duration}
             onChange={(e: { target: { value: string } }) =>
               onScrub(e.target.value)
             }

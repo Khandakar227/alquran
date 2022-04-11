@@ -24,7 +24,11 @@ export const fetcher = async (url: RequestInfo) => {
 };
 
 export function useSWRPrime(url: Key) {
-  const { data, error } = useSWR(url, fetcher);
+  const { data, error } = useSWR(url, fetcher,{
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false
+  });
 
   return {
     data,
@@ -33,14 +37,6 @@ export function useSWRPrime(url: Key) {
   };
 }
 
-export function generateNumber(from: number, to: number) {
-  let numbers = [];
-  for (let i = from; i <= to; i++) {
-    console.log("generate:", i);
-    numbers.push(i);
-  }
-  return numbers;
-}
 
 export const useIsMounted = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -64,11 +60,13 @@ export const checkLastRead = () => {
 
 export function generateMetadata (ayahs:Ayah[], surahDetail:Surah) {
   let data = [];
-  console.log(ayahs)
   for (let i = 0; i < ayahs.length; i++) {
     data.push({
             url:`https://cdn2.islamic.network/quran/audio/128/ar.alafasy/${ayahs[i].ayah_number}.mp3`,
-            metadata: {title: `${surahDetail.number}. ${surahDetail.englishName}, Ayat no. ${ayahs[i].ayah_number_in_surah}`}
+            metadata: {
+              title: `${surahDetail.number}. ${surahDetail.englishName}, Ayat no. ${ayahs[i].ayah_number_in_surah}`,
+              artwork: [{src: "/Quran_Kareem.png", type: "image/png"}]
+            }
             });
   }
   return data;

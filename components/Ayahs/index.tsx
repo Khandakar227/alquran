@@ -43,8 +43,10 @@ setUrls(data[0]
   }
   
   function play (i: number) {
-    if (trackIndex !== i) setTrackIndex(i)
-    else setIsPlaying(true)
+    if (trackIndex !== i) {
+      setTrackIndex(i);
+      setIsPlaying(true);
+    } else setIsPlaying(true);
   }
   return (
     <>
@@ -69,10 +71,10 @@ setUrls(data[0]
           </Paper>
         ))}
       {data && (
-        <Box sx={{ display: "flex", gap: "5px" }}>
+        <Box sx={{ display: "flex", gap: "5px", marginBottom: "1rem" }}>
           {surahDetail.number > 1 && data[0].ayah_number_in_surah <= 1 && (
             <Link href={previousSurah()}>
-              <Button my="lg" size="lg" color="blue" fullWidth>
+              <Button my="lg" size="md" color="blue" fullWidth>
                 Read previous surah
               </Button>
             </Link>
@@ -82,7 +84,7 @@ setUrls(data[0]
             data[data?.length - 1].ayah_number_in_surah >=
               surahDetail.numberOfAyahs && (
               <Link href={nextSurah()}>
-                <Button my="lg" size="lg" color="red" fullWidth>
+                <Button my="lg" size="md" color="red" fullWidth>
                   Read next surah
                 </Button>
               </Link>
@@ -90,7 +92,7 @@ setUrls(data[0]
 
           {data[0].ayah_number_in_surah > 1 && (
             <Link href={readPrevious()}>
-              <Button my="lg" size="lg" color="cyan" fullWidth>
+              <Button my="lg" size="md" color="cyan" fullWidth>
                 Previous
               </Button>
             </Link>
@@ -99,7 +101,7 @@ setUrls(data[0]
           {surahDetail.numberOfAyahs >
             data[data?.length - 1].ayah_number_in_surah && (
             <Link href={readMore()}>
-              <Button my="lg" size="lg" color="indigo" fullWidth>
+              <Button my="lg" size="md" color="indigo" fullWidth>
                 Next
               </Button>
             </Link>
