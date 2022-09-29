@@ -10,10 +10,10 @@ Commit and pull a request.
 ## Routes.
 | route | details |
 |-------|---------|
-| /surah_number | Any number you pass after the url separated by / is a the surah number.Example: `https://www.koran.vercel.app/2`.|
-| /surah_number?ayah=from:to | If not specified you will get maximum 10 ayah. You can limit ayah numbers with `from` `to`. Example: `https://www.koran.vercel.app/2?ayah=1:20` |
+| /surah_number | Any number you pass after the url separated by / is a the surah number.Example: `https://www.quranulkareem.vercel.app/2`.|
+| /surah_number?ayah=from:to | If not specified you will get maximum 10 ayah. You can limit ayah numbers with `from` `to`. Example: `https://www.quranulkareem.vercel.app/2?ayah=1:20` |
 | / surah_number/ayah_number | get an ayah from a surah. |
-| /search?keyword=word | search for an ayah contianing specific word from both translations and arabic texts Example: `https://www.koran.vercel.app/search?keyword=golaith` |
+| /search?keyword=word | search for an ayah contianing specific word from both translations and arabic texts Example: `https://www.quranulkareem.vercel.app/search?keyword=golaith` |
 
 ## Contact
 For any suggestion, issue contact where
