@@ -62,9 +62,9 @@ export function generateMetadata (ayahs:Ayah[], surahDetail:Surah) {
   let data = [];
   for (let i = 0; i < ayahs.length; i++) {
     data.push({
-            url:`https://cdn2.islamic.network/quran/audio/128/ar.alafasy/${ayahs[i].ayah_number}.mp3`,
+            url:`https://cdn2.islamic.network/quran/audio/128/ar.alafasy/${ayahs[i].number}.mp3`,
             metadata: {
-              title: `${surahDetail.number}. ${surahDetail.englishName}, Ayat no. ${ayahs[i].ayah_number_in_surah}`,
+              title: `${surahDetail.number}. ${surahDetail.englishName}, Ayat no. ${ayahs[i].numberInSurah}`,
               artwork: [{src: "/Quran_Kareem.png", type: "image/png"}]
             }
             });

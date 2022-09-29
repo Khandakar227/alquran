@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getSheetData } from "@/libs/sheet";
+import Prisma, { getTranslation } from "@/libs/db";
+
+const prisma = Prisma.getPrisma();
 
 export default async function handler(
   req: NextApiRequest,
@@ -7,36 +9,35 @@ export default async function handler(
 ) {
   try {
     const { keyword, lang } = req.query;
-    console.log(keyword);
-
+    const translation = getTranslation(lang?.toString() || "en");
     if (keyword.toString().trim()) {
-      const query = `
-        Select A, B, C, G,
-        ${lang?.toString().toLowerCase() === "bn" ? "I" : "H"}, J
-        Where LOWER(H) contains LOWER('${keyword}') or I contains '${keyword}' or J contains '${keyword}'
-        `;
+      const data = await prisma.ayahs.findMany({
+        where: {
+          OR: [
+            { ...searchFromTr(lang?.toString() || "en", keyword) },
+            { text: { contains: keyword.toString() } },
+          ],
+        },
+        include: {
+          // wbw: {
+          //   select: {
+          //     ayah_wbw: true,
+          //   },
+          // },
+          ...translation,
+        },
+      });
 
-      const data = await getSheetData(query, {});
-
-      res.json(data);
-    } else res.status(400).send('Bad request');
-
+      res.status(200).json(data);
+    } else res.status(400).send("Bad request");
   } catch (err: any) {
     console.log(err);
     res.status(500).json({ error: err.message });
   }
 }
 
-/*
-   A=  ayah_number
-   B = ayah_number_in_surah
-   C= surah_number
-   D = surah_nameEN
-   E = surah_nameAR
-   F = translated_surah_name
-   G = page_number
-   H = ayahEN
-   I = ayahBN
-   J = ayahAR
-   K = ayah_wbw
-*/
+function searchFromTr(lang: string, keyword: any) {
+  if (lang == "bn")
+    return { bn_ayahs: { text: { contains: keyword.toString() } } };
+  else return { en_ayahs: { text: { contains: keyword.toString() } } };
+}

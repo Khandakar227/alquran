@@ -1,6 +1,7 @@
 import { useAudio } from "@/libs/context/audio";
 import { AudioContextProps } from "@/libs/types";
 import { Box, Button } from "@mantine/core";
+import { BoxSx } from "@mantine/core/lib/components/Box/use-sx/use-sx";
 import {
   LoopIcon,
   PauseIcon,
@@ -8,14 +9,16 @@ import {
   TrackNextIcon,
   TrackPreviousIcon,
 } from "@radix-ui/react-icons";
-import { useEffect, useRef, useState, ReactNode } from "react";
+import { useEffect, useRef, useState, ReactNode, StyleHTMLAttributes } from "react";
 
 export default function AudioPlayer({
   src=[],
   children,
+  style
 }: {
   src: {metadata?: MediaMetadataInit, url: string}[]| any[];
   children?:ReactNode;
+  style: any
 }) {
   const {trackIndex, setTrackIndex, isPlaying, setIsPlaying, loop, setLoop} = useAudio() as AudioContextProps;
   
@@ -73,7 +76,7 @@ export default function AudioPlayer({
   useEffect(() => {
     if (!audioRef.current.tagName) return
     return () => {
-      audioRef.current.pause();
+      audioRef.current?.pause();
     };
   }, []);
   
@@ -132,8 +135,9 @@ export default function AudioPlayer({
             left: "0",
             width: "100%",
             background: theme.colorScheme === 'dark' ? theme.black : theme.white,
-            padding: "2px 0 4px",
+            padding: "2px 10px 0px",
             boxShadow: '0 1px 3px rgb(0 0 0), rgb(0 0 0) 0px 20px 25px 0px, rgb(0 0 0) 0px 10px 10px -5px',
+            style,
           })}
         >
           <audio 
@@ -165,7 +169,7 @@ export default function AudioPlayer({
             }}
           >
             <small>{displayDuration(audioRef.current.currentTime)}</small>
-            <small>{trackIndex + 1}</small>
+            <small>{src[trackIndex].metadata.title}</small>
             <small>{displayDuration(duration)}</small>
           </Box>
           <AudioControls

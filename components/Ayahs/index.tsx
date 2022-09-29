@@ -16,10 +16,10 @@ function Ayahs({ data, surahDetail }: { data: Ayah[]; surahDetail: Surah }) {
  useEffect(() =>{
 setUrls(data[0]
       ? generateMetadata(data, surahDetail) : []);
- },[])
+ },[surahDetail, data])
   
   function readMore() {
-    const from = data[data.length - 1].ayah_number_in_surah;
+    const from = data[data.length - 1].numberInSurah;
     const to =
       from + 10 <= surahDetail.numberOfAyahs
         ? from + 10
@@ -29,7 +29,7 @@ setUrls(data[0]
   }
 
   function readPrevious() {
-    const to = data[0].ayah_number_in_surah;
+    const to = data[0].numberInSurah;
     const from = to - 10 >= 1 ? to - 10 : 1;
 
     return `/${surahDetail.number}?ayah=${from}:${to}`;
@@ -48,15 +48,16 @@ setUrls(data[0]
       setIsPlaying(true);
     } else setIsPlaying(true);
   }
+  
   return (
     <>
       {data &&
         data?.map((ayah, i) => (
-          <Paper mb="sm" shadow="xs" padding="sm" key={ayah.ayah_number}>
-            <span>{ayah.ayah_number_in_surah}. </span>
-            <ArabicWBW ayah={ayah.ayah_wbw} />
+          <Paper mb="sm" shadow="xs" padding="sm" key={ayah.number}>
+            <span>{ayah.numberInSurah}. </span>
+            <ArabicWBW ayah={ayah.wbw?.ayah_wbw || ''} />
             <Box sx={{ fontSize: "1.1rem" }}>
-              {ayah.ayahEN ? ayah.ayahEN : ayah.ayahBN}
+              {ayah.en_ayahs?.text ? ayah.en_ayahs.text : ayah.bn_ayahs?.text}
             </Box>
             {
               isPlaying && trackIndex === i ?
@@ -72,7 +73,7 @@ setUrls(data[0]
         ))}
       {data && (
         <Box sx={{ display: "flex", gap: "5px", marginBottom: "1rem" }}>
-          {surahDetail.number > 1 && data[0].ayah_number_in_surah <= 1 && (
+          {surahDetail.number > 1 && data[0].numberInSurah <= 1 && (
             <Link href={previousSurah()}>
               <Button my="lg" size="md" color="blue" fullWidth>
                 Read previous surah
@@ -81,7 +82,7 @@ setUrls(data[0]
           )}
 
           {surahDetail.number < 114 &&
-            data[data?.length - 1].ayah_number_in_surah >=
+            data[data?.length - 1].numberInSurah >=
               surahDetail.numberOfAyahs && (
               <Link href={nextSurah()}>
                 <Button my="lg" size="md" color="red" fullWidth>
@@ -90,7 +91,7 @@ setUrls(data[0]
               </Link>
             )}
 
-          {data[0].ayah_number_in_surah > 1 && (
+          {data[0].numberInSurah > 1 && (
             <Link href={readPrevious()}>
               <Button my="lg" size="md" color="cyan" fullWidth>
                 Previous
@@ -99,14 +100,14 @@ setUrls(data[0]
           )}
 
           {surahDetail.numberOfAyahs >
-            data[data?.length - 1].ayah_number_in_surah && (
+            data[data?.length - 1].numberInSurah && (
             <Link href={readMore()}>
               <Button my="lg" size="md" color="indigo" fullWidth>
                 Next
               </Button>
             </Link>
           )}
-          <AudioPlayer src={urls}>
+          <AudioPlayer src={urls} style={{zIndex: 2}}>
           <Box component='small' sx={{textAlign:'center', fontSize:'10px'}}> Recited by Mishari bin Rashed Alafasy </Box>
           </AudioPlayer>
         </Box>

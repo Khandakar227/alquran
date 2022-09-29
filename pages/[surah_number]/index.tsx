@@ -30,16 +30,14 @@ export default function Surah({
   const [translation, _] = useTranslation();
   const { ayah, surah_number, tr } = router.query;
   const { data, error: swrError } = useSWR(getURL(), fetcher);
-  const {setLastRead} = checkLastRead()
+  const { setLastRead } = checkLastRead();
 
   useEffect(() => {
-
     const from = ayah?.toString().split(":")[0] || "";
     const to = ayah?.toString().split(":")[1] || "";
-    
-    setLastRead(JSON.stringify({from, to, surah_number}))
 
-  }, [ayah, surah_number])
+    setLastRead(JSON.stringify({ from, to, surah_number }));
+  }, [ayah, surah_number]);
 
   function getURL() {
     const from = ayah?.toString().split(":")[0] || "";
@@ -61,7 +59,7 @@ export default function Surah({
     <Container padding="md">
       <SEO
         title={`${surah.number}. ${surah.englishName} (${surah.name}) - Al Quran`}
-        />
+      />
 
       <SelectASurah />
 
@@ -90,10 +88,11 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   try {
     //Get the surah number from params
     const surah_number = (ctx.params?.surah_number as string) || "";
+    const surah = surahs.references[(+surah_number && +surah_number - 1) || 0];
 
     return {
       props: {
-        surah: surahs.references[(+surah_number && +surah_number - 1) || 0],
+        surah,
       },
     };
   } catch (error: any) {

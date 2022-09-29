@@ -32,8 +32,12 @@ function Layout({ children }: { children: ReactElement<any, any> }) {
             textAlign: "center",
             color: "white",
           })}
-        >
+        > {
+          router.query.surah_number != '9' ?
           <h1 lang="ar"><Link href="/">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</Link></h1>
+          :
+          <Link href="/"><h1 style={{width: '100%'}}>Al Quran</h1></Link>
+        }
           {/* <Bismillah/> */}
         </Box>
 

@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model surahs {
+  number                 Int    @id @default(autoincrement()) @db.UnsignedInt
+  name                   String @db.Text
+  englishName            String @db.Text
+  englishNameTranslation String @db.Text
+  numberOfAyahs          Int
+  revelationType         String @db.Text
+}
+
+model ayahs {
+  number        Int         @id @default(autoincrement()) @db.UnsignedInt
+  text          String      @db.Text
+  numberInSurah Int         @unique
+  juz           Int
+  manzil        Int
+  page          Int
+  ruku          Int
+  hizbQuarter   Int
+  surahNumber   Int
+  word_data     word_data[]
+  wbw           wbw?
+  en_ayahs      en_ayahs?
+  bn_ayahs      bn_ayahs?
+}
+
+model word_data {
+  word_id              Int     @id @default(autoincrement())
+  word_surah           Int?
+  word_ayah            Int
+  word_page            Int?
+  word_number_in_quran Int?
+  word_number_in_surah Int?
+  word_number_in_ayah  Int?
+  word_type            String? @db.VarChar(10)
+  word_arabic          String? @db.VarChar(40)
+  word_transliteration String? @db.VarChar(40)
+  word_translation     String? @db.VarChar(100)
+  ayahs                ayahs   @relation(fields: [word_ayah], references: [numberInSurah])
+
+  @@index([word_transliteration], map: "ARABIC")
+  @@index([word_ayah, word_number_in_surah], map: "AYAH")
+  @@index([word_id, word_surah], map: "ID")
+  @@index([word_surah, word_ayah], map: "SURAH")
+  @@index([word_id, word_surah, word_ayah, word_number_in_quran, word_number_in_surah, word_number_in_ayah, word_type], map: "word_id")
+  @@index([word_number_in_quran], map: "word_number_in_quran")
+}
+
+model en_ayahs {
+  number Int    @id @default(autoincrement()) @db.UnsignedInt
+  text   String @db.Text
+  ayahs  ayahs  @relation(fields: [number], references: [number])
+}
+
+model bn_ayahs {
+  number Int    @id @default(autoincrement()) @db.UnsignedInt
+  text   String @db.Text
+  ayahs  ayahs  @relation(fields: [number], references: [number])
+}
+
+model wbw {
+  number       Int    @id @default(autoincrement()) @db.UnsignedInt
+  ayah_number  Int
+  surah_number Int
+  ayah_wbw     String @db.Text
+  ayahs        ayahs  @relation(fields: [number], references: [number])
+}

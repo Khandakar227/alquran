@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Box } from "@mantine/core";
 import styles from "./style.module.css";
+import { wbw } from "@/libs/types";
 
 function ArabicWBW({ ayah }: { ayah: string }) {
-  const [arabicText, setArabicText] = useState<any>();
+  const [arabicText, setArabicText] = useState<wbw[]>();
 
   
   useEffect(() => {
@@ -22,9 +23,8 @@ function ArabicWBW({ ayah }: { ayah: string }) {
       lang="ar"
     >
       {arabicText &&
-        arabicText.map((word: any) => (
-          <span key={word.word_number_in_quran} className={styles.arabicWord}>
-
+        arabicText.map((word: wbw) => (
+          <span key={word.word_number_in_surah} className={styles.arabicWord}>
             <Box
               component="span"
               className={styles.translation}
