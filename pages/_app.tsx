@@ -10,6 +10,7 @@ import Nprogress from 'nprogress';  //For showing a progress bar while navigatin
 import 'nprogress/nprogress.css'
 import { useLocalStorageValue } from "@mantine/hooks";
 import { TranslationProvider } from "@/libs/context";
+import SEO from '@/components/SEO'
 import Router from "next/router"
 import {useEffect} from "react"
 
@@ -37,6 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       >
         <TranslationProvider>
         <MantineProvider theme={{ colorScheme }} withGlobalStyles>
+          <SEO setDefault={true} />
           <Layout>
             <Component {...pageProps} />
           </Layout>

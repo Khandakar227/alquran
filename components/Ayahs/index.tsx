@@ -8,14 +8,13 @@ import {PauseIcon, PlayIcon} from "@radix-ui/react-icons";
 import {generateMetadata} from "@/libs/index"
 import {useState, useEffect} from "react";
 
-function Ayahs({ data, surahDetail }: { data: Ayah[]; surahDetail: Surah }) {
+function Ayahs({ data=[], surahDetail }: { data: Ayah[]; surahDetail: Surah }) {
  const [urls, setUrls] = useState<string[] | any[]>([]);
  
  const {isPlaying, setIsPlaying, trackIndex, setTrackIndex} = useAudio() as AudioContextProps;
  
  useEffect(() =>{
-setUrls(data[0]
-      ? generateMetadata(data, surahDetail) : []);
+setUrls(data.length ? generateMetadata(data, surahDetail) : []);
  },[surahDetail, data])
   
   function readMore() {
