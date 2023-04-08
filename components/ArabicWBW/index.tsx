@@ -19,7 +19,7 @@ function ArabicWBW({ ayah }: { ayah: string }) {
 
   return (
     <Box
-      sx={{ margin: "10px 0", fontWeight: "bold", fontSize: "clamp(1.2rem, 6vw, 2rem)" }}
+      sx={{ margin: "10px 0", fontSize: "clamp(1.2rem, 6vw, 2rem)" }}
       lang="ar"
     >
       {arabicText &&
