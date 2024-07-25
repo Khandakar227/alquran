@@ -37,4 +37,4 @@ credentials.json
 # typescript
 *.tsbuildinfo
 
-data/
+data
