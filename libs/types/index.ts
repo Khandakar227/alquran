@@ -1,25 +1,20 @@
 import { Dispatch, SetStateAction, MutableRefObject } from "react";
 
 export type Ayah = {
-  number?: number;
-  numberInSurah: number;
-  surahNumber?: number;
-  page?: number;
-  en_ayahs?: {text: string};
-  bn_ayahs?: {text: string};
-  text: string;
-  word_data?: word_data[];
-  wbw?: {ayah_wbw: string};
-  [key: string]: any;
+  number: number,
+  text: string,
+  en_text: string,
+  bn_text: string,
+  numberInSurah: number,
+  juz: number,
+  manzil: number,
+  page: number,
+  ruku: number,
+  hizbQuarter: number,
+  surahNumber: number,
+  wbw: Word[]
 };
-export type word_data = {
-  word_id: number;
-  word_arabic: string;
-  word_translation: string;
-  word_transliteration: string;
-  [key: string]: any;
-};
-export type wbw = {
+export type Word = {
   word_arabic: number,
   word_arabic_indopak: string,
   word_arabic_uthmani: string,

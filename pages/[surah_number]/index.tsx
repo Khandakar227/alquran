@@ -12,6 +12,7 @@ import { useTranslation } from "@/libs/context";
 import AudioProvider from "@/libs/context/audio";
 import { useEffect } from "react";
 
+
 export default function Surah({
   surah,
   error,
@@ -32,6 +33,7 @@ export default function Surah({
   const { data, error: swrError } = useSWR(getURL(), fetcher);
   const { setLastRead } = checkLastRead();
 
+
   useEffect(() => {
     const from = ayah?.toString().split(":")[0] || "";
     const to = ayah?.toString().split(":")[1] || "";
@@ -50,7 +52,7 @@ export default function Surah({
       tr: tr ? tr.toString() : translation.toString(),
     });
 
-    return `/api?` + (searchParams && searchParams.toString());
+    return `/api/v1?` + (searchParams && searchParams.toString());
   }
 
   if (!surah || error) return <Error error={error} />;

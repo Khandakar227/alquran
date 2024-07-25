@@ -16,7 +16,7 @@ export default function Search() {
       lang: keyword?.toString().match(/[a-zA-Z0-9]/g) ? "en" : "bn",
     });
 
-    return `/api/search?` + (searchParams && searchParams.toString());
+    return `/api/v1/search?` + (searchParams && searchParams.toString());
   }
 
   if (!data && isError) return <Error error={isError} />;

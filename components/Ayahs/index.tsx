@@ -12,7 +12,6 @@ function Ayahs({ data=[], surahDetail }: { data: Ayah[]; surahDetail: Surah }) {
  const [urls, setUrls] = useState<string[] | any[]>([]);
  
  const {isPlaying, setIsPlaying, trackIndex, setTrackIndex} = useAudio() as AudioContextProps;
- 
  useEffect(() =>{
 setUrls(data.length ? generateMetadata(data, surahDetail) : []);
  },[surahDetail, data])
@@ -54,9 +53,9 @@ setUrls(data.length ? generateMetadata(data, surahDetail) : []);
         data?.map((ayah, i) => (
           <Paper mb="sm" shadow="xs" padding="sm" key={ayah.number}>
             <span>{ayah.numberInSurah}. </span>
-            <ArabicWBW ayah={ayah.wbw?.ayah_wbw || ''} />
+            <ArabicWBW ayah={ayah.wbw || ''} />
             <Box sx={{ fontSize: "1.1rem" }}>
-              {ayah.en_ayahs?.text ? ayah.en_ayahs.text : ayah.bn_ayahs?.text}
+              {ayah.en_text ? ayah.en_text : ayah.bn_text}
             </Box>
             {
               isPlaying && trackIndex === i ?
@@ -70,7 +69,7 @@ setUrls(data.length ? generateMetadata(data, surahDetail) : []);
             }
           </Paper>
         ))}
-      {data && (
+      {(data && data.length) && (
         <Box sx={{ display: "flex", gap: "5px", marginBottom: "1rem" }}>
           {surahDetail.number > 1 && data[0].numberInSurah <= 1 && (
             <Link href={previousSurah()}>

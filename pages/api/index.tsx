@@ -11,6 +11,8 @@ export default async function handler(
     const { endAt, startFrom, tr, surah_number, ayah_number } = req.query;
     const translation = getTranslation(tr?.toString() || 'en');
 
+    if(!surah_number) return res.status(401).json({error: "No surah number specified."})
+
     if (!ayah_number) {
       const take =
         endAt && startFrom && +endAt - +startFrom + 1 > 0

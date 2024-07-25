@@ -46,7 +46,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
     const { origin } = absoluteURL(ctx.req);
 
     const { data } = await axios.get(
-      `${origin}/api?surah_number=${surah_number}&ayah_number=${ayah_number}&tr=${tr}`
+      `${origin}/api/v1?surah_number=${surah_number}&ayah_number=${ayah_number}&tr=${tr}`
     );
     
     return {
