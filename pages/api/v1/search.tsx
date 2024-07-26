@@ -1,9 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import Prisma, { getTranslation } from "@/libs/db";
 import Ayah from "@/libs/db/models/Ayah";
 import { dbConnect } from "@/libs/db/mongodb";
 
-const prisma = Prisma.getPrisma();
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,7 +14,7 @@ export default async function handler(
     await dbConnect();
 
     if (keyword.toString().trim()) {
-      const data = await Ayah.find({ $text: { $search: keyword.toString() } });
+      const data = await Ayah.find({ $text: { $search: keyword.toString() } }).select('-wbw');
       res.status(200).json(data);
     } else res.status(400).send("Bad request");
   } catch (err: any) {

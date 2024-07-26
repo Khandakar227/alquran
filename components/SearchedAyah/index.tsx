@@ -10,14 +10,13 @@ export default function SearchedAyah({
   data: any;
   keyword: string;
 }) {
-    const [ translation, _ ] = useTranslation()
-    
+  const [translation, _] = useTranslation()
   return (
     <>
       {data.length &&
         data.map((ayah: Ayah) => (
           <Link key={ayah.number} href={`${ayah.surahNumber}/${ayah.numberInSurah}?tr=${translation}`} passHref>
-            <Paper mb="sm" shadow="sm" padding="sm" sx={{cursor: 'pointer'}}>
+            <Paper mb="sm" shadow="sm" padding="sm" sx={{ cursor: 'pointer' }}>
               {ayah.surahNumber}. {ayah.numberInSurah}
               <Box lang="ar">
                 <Highlight
@@ -28,7 +27,7 @@ export default function SearchedAyah({
                 </Highlight>
               </Box>
               <Highlight highlight={keyword}>
-                {ayah?.bn_ayahs?.text || ayah?.en_ayahs?.text || ''}
+                {translation == 'en' ? ayah?.en_text || '' : ayah?.bn_text || ''}
               </Highlight>
             </Paper>
           </Link>

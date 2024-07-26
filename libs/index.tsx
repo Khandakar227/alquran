@@ -59,7 +59,7 @@ export const checkLastRead = () => {
 };
 
 export function generateMetadata (ayahs:Ayah[], surahDetail:Surah) {
-  let data = [];
+  let data = [] as {url: string, metadata: {title: string, artwork: any}}[];
   for (let i = 0; i < ayahs.length; i++) {
     data.push({
             url:`https://cdn2.islamic.network/quran/audio/128/ar.alafasy/${ayahs[i].number}.mp3`,

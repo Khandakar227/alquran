@@ -19,7 +19,8 @@
       "@/components/*": ["components/*"],
       "@/libs/*": ["libs/*"],
       "@/public/*": ["public/*"]
-    }
+    },
+    "noImplicitAny": false
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
