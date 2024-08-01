@@ -62,7 +62,7 @@ export function generateMetadata (ayahs:Ayah[], surahDetail:Surah) {
   let data = [] as {url: string, metadata: {title: string, artwork: any}}[];
   for (let i = 0; i < ayahs.length; i++) {
     data.push({
-            url:`https://cdn2.islamic.network/quran/audio/128/ar.alafasy/${ayahs[i].number}.mp3`,
+            url:`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${ayahs[i].number}.mp3`,
             metadata: {
               title: `${surahDetail.number}. ${surahDetail.englishName}, Ayat no. ${ayahs[i].numberInSurah}`,
               artwork: [{src: "/Quran_Kareem.png", type: "image/png"}]
