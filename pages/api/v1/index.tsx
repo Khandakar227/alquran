@@ -20,7 +20,7 @@ export default async function handler(
                     : 20;
 
             const skip = startFrom && +startFrom - 1 >= 0 ? +startFrom - 1 : 0;
-            const data = await Ayah.find({ surahNumber: +surah_number }).skip(skip).limit(limit);
+            const data = await Ayah.find({ surahNumber: +surah_number }).skip(skip).limit(limit).sort('number');
             res.status(200).json(data);
 
         } else {
