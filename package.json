@@ -15,7 +15,7 @@
     "@radix-ui/react-icons": "^1.0.3",
     "axios": "^1.7.3",
     "mongoose": "^8.5.1",
-    "next": "14.2.5",
+    "next": "14.2.35",
     "next-absolute-url": "^1.2.2",
     "next-seo": "^5.5.0",
     "nprogress": "^0.2.0",
